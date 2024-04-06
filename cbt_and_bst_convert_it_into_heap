@@ -1,0 +1,111 @@
+#include <iostream>
+#include<queue>
+using namespace std;
+class Node {
+  public:
+  int data;
+   Node * left;
+   Node * right;
+
+   Node (int val){
+     this->data = val;
+     this->left = NULL;
+     this->right = NULL;
+   }
+};
+Node * BSTfun(Node * root , int data){
+   if(root==NULL){
+     root = new Node(data);
+     return root;
+   }
+
+  //if its not first node
+  if(root->data < data){
+    root->right = BSTfun(root->right,data);
+  }
+  else{
+    root->left = BSTfun(root->left,data);
+  }
+  return root;
+}
+void createBST(Node * &root){
+  // cout<<"enter data"<<endl;
+  int data;
+  cin>>data;
+
+  while(data!=-1){
+    root = BSTfun(root,data);
+    // cout<<"enter data"<<endl;;
+    cin>>data;
+  }
+  
+}
+
+void levelorderTraversal(Node * root){
+queue<Node *>q;
+q.push(root);
+q.push(NULL);
+
+while(!q.empty()){
+  Node * front = q.front();
+
+  q.pop();
+
+  if(front == NULL){
+     cout<<endl;
+     if(!q.empty()){
+     q.push(NULL);
+     }
+  }
+  else {
+
+  cout<<front->data<<" ";
+
+  if(front->left!=NULL){
+     q.push(front->left);
+  }
+  if(front->right!=NULL){
+    q.push(front->right);
+
+  }
+  }
+}
+}
+
+void inorder(Node * root , vector<int>&v){
+  if(root==NULL){
+    return;
+  }
+  inorder(root->left,v);
+  v.push_back(root->data);
+  inorder(root->right,v);
+
+}
+void replaceusingPostorder(Node * root , vector<int>&v , int &index){
+  if(root == NULL){
+    return;
+  }
+  replaceusingPostorder(root->left,v,index);
+  replaceusingPostorder(root->right,v,index);
+  root->data = v[index];
+  index++;
+}
+Node * ConvertToHeap(Node * root){
+  vector<int>v;
+  inorder(root,v);
+
+  int index = 0;
+  replaceusingPostorder(root , v , index );
+  return root;
+}
+int main() {
+  Node * root = NULL;
+  createBST(root);
+  cout<<"printing bst :"<<endl;
+  levelorderTraversal(root);
+  cout<<endl;
+
+  cout<<"printing the max heap: "<<endl;
+  root = ConvertToHeap(root);
+  levelorderTraversal(root);
+}
