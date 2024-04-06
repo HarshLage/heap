@@ -15,11 +15,28 @@ int getkthSmallest(int arr[] , int k , int n){
     return pq.top();
 
 }
+int getkthgreatest(int arr[],int k , int n){
+     priority_queue<int,vector<int>,greater<int>>pq;
+    for(int i=0;i<k;i++){
+      pq.push(arr[i]);
+    }
+    for(int i=k;i<n;i++){
+        if(arr[i]>pq.top()){
+            pq.pop();
+            pq.push(arr[i]);
+        }
+    }
+    return pq.top();
+
+}
 int main(){
   int arr[] = {3,5,4,6,9,8,7};
   int n = 7;
   int k = 3;
+  int ans_greater = getkthgreatest(arr,k,n);
+
   int answer = getkthSmallest(arr,k,n);
-  cout<<answer<<endl;
+  cout<<"kth greatest element :"<<ans_greater<<endl;
+  cout<<"kth smallest element :"<<answer<<endl;
   
 }
