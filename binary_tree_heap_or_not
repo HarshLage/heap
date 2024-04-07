@@ -1,0 +1,64 @@
+Info solve(Node * root){
+    if(root==NULL){
+      Info temp(0,true);
+      temp.maxVal = INT_MIN;
+      temp.ans = true;
+      return temp;
+    }
+    if(root->left == NULL && root -> right == NULL){
+      Info temp(0,true);
+      temp.maxVal = root->data;
+      temp.ans = true;
+      return temp;
+    }
+    Info leftans = solve(root->left);
+    Info rightans = solve(root->right);
+
+    if(root->data > leftans.maxVal && root->data > rightans.maxVal && leftans.ans && rightans.ans){
+      Info temp(0,true);
+      temp.maxVal = root->data;
+      temp.ans =true;
+      return temp;
+    }
+    else{
+      Info temp(0,true);
+      temp.maxVal = max(root->data,max(leftans.maxVal,rightans.maxVal));
+      temp.ans = false;
+      return temp;
+    }
+
+}
+   bool levelorderTraversal(Node * root){
+        queue<Node *>q;
+        q.push(root);
+        bool flag = 0;
+
+        while(!q.empty()){
+            Node * front = q.front();
+            q.pop();
+
+            if(front==NULL){
+                flag = true;
+            }
+            else{
+                if(flag){
+                    return false;
+                }
+
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+        return true;
+    }
+    bool isHeap(struct Node* tree) {
+        bool istrue = levelorderTraversal(tree);
+        Info answer = solve(tree);
+        if(istrue){
+        return answer.ans;
+        }
+        else{
+            return false;
+        }
+       
+    }
