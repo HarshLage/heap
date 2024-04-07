@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node {
+  public:
+  int data;
+  Node * left;
+  Node * right;
+  Node(int val){
+    this -> data = val;
+    this -> left = NULL;
+    this -> right = NULL;
+  }
+};
+ Node * tree(){
+  cout<<"enter the Node :"<<endl;
+  int data;
+  cin>>data;
+
+  if(data == -1){
+    return NULL;
+  }
+  //right implementation
+  Node * root = new Node(data);
+  cout<<"for left Node :"<< root -> data <<endl;
+  root -> left  = tree();
+   
+  //left implementation 
+  cout<<"for right subtree :" << root -> data << endl;
+  root -> right  = tree();
+  return root; 
+
+ }
+class Info{
+    public : 
+    int maxVal;
+    bool ans;
+
+    Info(int a , bool b){
+        this -> maxVal = a;
+        this -> ans = b;
+    }
+};
+
+Info solve(Node * root){
+    if(root==NULL){
+      Info temp(0,true);
+      temp.maxVal = INT_MIN;
+      temp.ans = true;
+      return temp;
+    }
+    if(root->left == NULL && root -> right == NULL){
+      Info temp(0,true);
+      temp.maxVal = root->data;
+      temp.ans = true;
+      return temp;
+    }
+    Info leftans = solve(root->left);
+    Info rightans = solve(root->right);
+
+    if(root->data > leftans.maxVal && root->data > rightans.maxVal && leftans.ans && rightans.ans){
+      Info temp(0,true);
+      temp.maxVal = root->data;
+      temp.ans =true;
+      return temp;
+    }
+    else{
+      Info temp(0,true);
+      temp.maxVal = max(root->data,max(leftans.maxVal,rightans.maxVal));
+      temp.ans = false;
+      return temp;
+    }
+
+}
+int main()
+{
+  Node * root = tree();
+  
+  Info temp = solve(root);
+  bool ans = temp.ans;
+  cout<<temp.maxVal<<endl;
+  if(ans){
+    cout<<"this is a valid heap"<<endl;
+  }
+  else{
+    cout<<"this not valid heap"<<endl;
+  }
+  return 0; 
+}
