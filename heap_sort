@@ -10,7 +10,7 @@ class heap{
   heap(int capacity){
     this->arr = new int[capacity];
     this->capacity = capacity;
-    this->size = 0;
+    this->size = 1;
   }
 
   void insert(int element){
